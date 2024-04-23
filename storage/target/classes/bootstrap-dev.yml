@@ -1,0 +1,39 @@
+spring:
+  cloud:
+    inetutils:
+      preferred-networks:
+        - 192.168.31
+    nacos:
+      config:
+        server-addr: 192.168.2.88:8848
+        file-extension: yaml
+      discovery:
+        server-addr: 192.168.2.88:8848
+      username: ""
+      password: ""
+seata:
+  registry:
+    type: nacos
+    nacos: # tc
+      server-addr: 192.168.2.88:8848
+      username:
+      password:
+      group: DEFAULT_GROUP
+      application: seata-server # tc服务在nacos中的服务名称
+  tx-service-group: seata-group # 事务组，根据这个获取tc服务的cluster名称,方便后期切换集群
+  # 默认映射配置，nacos如果配置了，会采用nacos上的配置
+  service:
+    vgroup-mapping:
+      seata-group : default
+  # 开启数据源的代理模式
+  data-source-proxy-mode: AT # 默认就是AT
+  application-id: storage
+  config:
+    nacos:
+      server-addr: 192.168.2.88:8848
+      username:
+      password:
+      group: DEFAULT_GROUP
+      data-id: seata.properties
+    type: nacos
+  enabled: true

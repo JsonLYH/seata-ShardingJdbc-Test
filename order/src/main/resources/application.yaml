@@ -1,0 +1,40 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: order
+  shardingsphere:
+    datasource:
+      names: ds
+      ds:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.2.88:3306/order?userSSL=false&useUnicode=true&characterEncoding=UTF8
+        username: root
+        password: 123456
+        druid:
+          initial-size: 5
+          max-active: 100
+          min-idle: 10
+          max-wait: 60000
+          keep-alive: true
+    sharding:
+      tables:
+        order_tbl:
+          actual-data-nodes: ds.order_tbl_$->{0..1}
+          table-strategy:
+            inline:
+              sharding-column: id
+              algorithm-expression: order_tbl_$->{id % 2}
+    defaultDataSourceName: ds
+    props:
+      sql:
+        show: true
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://192.168.2.88:3306/order?userSSL=false&useUnicode=true&characterEncoding=UTF8
+#    username: root
+#    password: 123456
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
